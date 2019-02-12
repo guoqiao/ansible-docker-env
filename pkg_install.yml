@@ -1,23 +1,20 @@
 #!/usr/bin/env ansible-playbook
 
-- name: apt install
-  hosts: apt
+- hosts: apt
   tasks:
     - name: apt install
       apt:
         update_cache: yes
         name: "{{pkg}}"
 
-- name: yum install
-  hosts: yum
+- hosts: yum
   tasks:
     - name: yum install
       yum:
         update_cache: yes
         name: "{{pkg}}"
 
-- name: dnf install
-  hosts: dnf
+- hosts: dnf
   tasks:
     - name: dnf install
       dnf:

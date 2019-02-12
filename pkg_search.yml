@@ -1,0 +1,23 @@
+#!/usr/bin/env ansible-playbook
+
+- hosts: apt
+  tasks:
+    - name: apt search pkg
+      command: "apt search {{pkg}}"
+      register: output
+      changed_when: 'output.stdout_lines|length < 3'
+
+
+- hosts: yum
+  tasks:
+    - name: yum search pkg
+      command: "yum search {{pkg}}"
+      register: output
+      changed_when: '"no matches found" in output.stderr|lower'
+
+- hosts: dnf
+  tasks:
+    - name: dnf search pkg
+      command: "dnf search {{pkg}}"
+      register: output
+      changed_when: '"no matches found" in output.stderr|lower'

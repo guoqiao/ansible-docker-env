@@ -1,0 +1,49 @@
+#!/usr/bin/env ansible-playbook
+
+- name: vagrant up
+  hosts: localhost
+  tasks:
+
+    - name: render template
+      tags: render
+      template:
+        src: templates/docker-compose.yml
+        dest: "docker-compose.yml"
+        force: yes
+
+    - name: docker-compose down
+      command: >
+        docker-compose --verbose --log-level DEBUG
+        down --remove-orphans
+
+    - name: docker-compose up
+      # we want fresh images, always recreate
+      command: >
+        docker-compose --verbose --log-level DEBUG
+        up --force-recreate --detach
+
+- name: apt
+  hosts: apt
+  tasks:
+    # ubuntu docker images has no python, sudo
+    - name: apt-get install
+      raw: apt-get -y update && apt-get install -y sudo apt aptitude python-minimal
+
+- name: yum
+  hosts: yum
+  tasks:
+    # centos docker images has no sudo
+    - name: yum install
+      raw: yum -y update && yum install -y epel-release sudo
+
+- name: dnf
+  hosts: dnf
+  tasks:
+    # dnf docker images has no sudo
+    - name: dnf install
+      raw: dnf -y update && dnf install -y sudo
+
+- name: run setup to check
+  hosts: all
+  tasks:
+    - setup:

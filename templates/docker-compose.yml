@@ -8,5 +8,6 @@ services:
     hostname: {{hostname}}
     image: {{hostvars[hostname].docker_image}}
     command: tail -f /etc/environment
+
 {% endfor %}
 
