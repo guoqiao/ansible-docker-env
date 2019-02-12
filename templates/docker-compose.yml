@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+{% for hostname in hostvars %}
+
+  {{hostname}}:
+    container_name: {{hostname}}
+    hostname: {{hostname}}
+    image: {{hostvars[hostname].docker_image}}
+    command: tail -f /etc/environment
+{% endfor %}
+

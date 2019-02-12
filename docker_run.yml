@@ -1,0 +1,15 @@
+#!/usr/bin/env ansible-playbook
+
+- name: vagrant up
+  hosts: localhost
+  tasks:
+
+    - name: render template
+      tags: render
+      template:
+        src: templates/docker-compose.yml
+        dest: "docker-compose.yml"
+        force: yes
+
+    - name: docker-compose up
+      command: docker-compose --verbose --log-level DEBUG up --force-recreate

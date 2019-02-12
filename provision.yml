@@ -1,0 +1,24 @@
+#!/usr/bin/env ansible-playbook
+
+- name: apt install
+  hosts: apt
+  tasks:
+    - name: ensure python
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      failed_when: false
+
+    - name: ensure sudo
+      raw: test -e /usr/bin/sudo || (apt -y update && apt install -y sudo)
+      failed_when: false
+
+
+- name: yum install
+  hosts: yum
+  tasks:
+    - name: ensure python
+      raw: test -e /usr/bin/python || (yum -y update && yum install -y python)
+      failed_when: false
+
+    - name: ensure sudo
+      raw: test -e /usr/bin/sudo || (yum -y update && yum install -y sudo)
+      failed_when: false
