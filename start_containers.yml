@@ -1,7 +1,8 @@
 #!/usr/bin/env ansible-playbook
 
-- name: vagrant up
+- name: start machines
   hosts: localhost
+  strategy: free
   tasks:
 
     - name: render template
@@ -22,26 +23,10 @@
         docker-compose --verbose --log-level DEBUG
         up --force-recreate --detach
 
-- name: apt
-  hosts: apt
+- name: run raw cmd to init containers
+  hosts: docker
   tasks:
-    # ubuntu docker images has no python, sudo
-    - name: apt-get install
-      raw: apt-get -y update && apt-get install -y sudo apt aptitude python-minimal
-
-- name: yum
-  hosts: yum
-  tasks:
-    # centos docker images has no sudo
-    - name: yum install
-      raw: yum -y update && yum install -y epel-release sudo
-
-- name: dnf
-  hosts: dnf
-  tasks:
-    # dnf docker images has no sudo
-    - name: dnf install
-      raw: dnf -y update && dnf install -y sudo
+    - raw: "{{raw_cmd}}"
 
 - name: run setup to check
   hosts: all
