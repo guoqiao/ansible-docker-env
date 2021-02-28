@@ -1,6 +1,7 @@
 #!/usr/bin/env ansible-playbook
 
 - hosts: apt
+  become: yes
   tasks:
     - name: apt search pkg
       command: "apt search {{pkg}}"
